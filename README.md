@@ -4,7 +4,7 @@ This repository contains (or will) Field Papers' snapshot processing pipeline.
 
 This pipeline involves reading QR codes present in photos / scans (to determine
 the atlas and page to which they correspond), identifying, extracting and
-rectifying the source page, and geo-registering it.
+rectifying the source page, and geo-reference it.
 
 ## How It Works
 
@@ -61,3 +61,26 @@ You'll need `opencv` and `cmake` (both in Homebrew):
 ```bash
 brew install cmake opencv
 ```
+
+## History
+
+Walking Papers [originally used a SIFT-based blob
+detector](http://mike.teczno.com/notes/walking-papers.html) to locate the
+corners of individual prints (using images of gargoyles). While this worked
+great for scans, the increasing prevalence of reasonably-qualified cameras on
+cell phones made it more important to handle images in less predictable
+orientations and lighting conditions.
+
+Following this need and some inspiration from the [Astrometry
+project](http://code.flickr.net/2009/02/18/found-in-space/), the gargoyles were
+[replaced by blob detection of dots and the use of
+trigonometry](http://mike.teczno.com/notes/walking-papers-cheaply.html). In
+brief, the dots form triangles whose orientations and angles [can be used to
+find corners and determine paper
+sizes](https://www.flickr.com/photos/mmigurski/5548950825/).
+
+Once the dots have been identified and their relationships used to information
+about the print, their pixel locations can be combined with their expected
+geolocation to produce ground control points for use by `gdal_translate` and
+`gdalwarp`, ultimately producing a geo-referenced image that can be tiled and
+browsed.
