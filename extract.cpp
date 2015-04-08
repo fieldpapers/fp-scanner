@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
   Mat img_scene = imread(argv[2], CV_LOAD_IMAGE_GRAYSCALE);
 
   if (!img_object.data || !img_scene.data) {
-    cout << " --(!) Error reading images " << endl;
+    cerr << " --(!) Error reading images " << endl;
     return -1;
   }
 
